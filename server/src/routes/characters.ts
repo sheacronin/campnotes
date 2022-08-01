@@ -1,13 +1,13 @@
-var express = require('express');
-var router = express.Router();
-const pool = require('../db');
+import express from 'express';
+const router = express.Router();
+import pool from '../config/db';
 
 router.get('/', async (req, res) => {
   try {
     const allCharacters = await pool.query('SELECT * FROM characters');
     res.json(allCharacters.rows);
   } catch (error) {
-    console.error(error.message);
+    console.error(error);
   }
 });
 
@@ -21,7 +21,7 @@ router.get('/:id', async (req, res) => {
 
     res.json(character.rows[0]);
   } catch (error) {
-    console.error(error.message);
+    console.error(error);
   }
 });
 
@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
 
     res.json(newCharacter.rows[0]);
   } catch (error) {
-    console.error(error.message);
+    console.error(error);
   }
 });
 
@@ -50,7 +50,7 @@ router.put('/:id', async (req, res) => {
 
     res.json(updateCharacter);
   } catch (error) {
-    console.error(error.message);
+    console.error(error);
   }
 });
 
@@ -63,8 +63,8 @@ router.delete('/:id', async (req, res) => {
     );
     res.json('Character was deleted');
   } catch (error) {
-    console.error(error.message);
+    console.error(error);
   }
 });
 
-module.exports = router;
+export default router;
