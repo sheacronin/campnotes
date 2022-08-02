@@ -1,0 +1,11 @@
+.characters-container {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.character {
+  background-color: #acad94;
+  padding: 10px;
+  text-align: center;
+}

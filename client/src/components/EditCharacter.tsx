@@ -1,32 +1,70 @@
 import React, { useState } from 'react';
+import { ICharacter } from '../types';
 
-function EditCharacter() {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [alignment, setAlignment] = useState('');
-  const [race, setRace] = useState('');
+interface EditCharacterProps {
+  character?: ICharacter;
+  setIsEditing: Function;
+  setCharacters: Function;
+}
+
+function EditCharacter({
+  character = { id: -1, name: '', description: '', alignment: '', race: '' },
+  setIsEditing,
+  setCharacters,
+}: EditCharacterProps) {
+  const [name, setName] = useState(character.name);
+  const [description, setDescription] = useState(character.description);
+  const [alignment, setAlignment] = useState(character.alignment);
+  const [race, setRace] = useState(character.race);
 
   async function onSubmitForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    try {
-      const body = { name, description, alignment, race };
-      const response = await fetch('http://localhost:5000/characters', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error(error);
+
+    const body = { name, description, alignment, race };
+
+    if (character.id === -1) {
+      // If no character (set default id to -1), post new character
+      try {
+        const response = await fetch('http://localhost:5000/characters', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        const data = await response.json();
+        console.log(data);
+        setCharacters((prevState: ICharacter[]) => [...prevState, data]);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      // Else, edit the exisiting character
+      try {
+        const response = await fetch(
+          `http://localhost:5000/characters/${character.id}`,
+          {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          }
+        );
+        const data = await response.json();
+        console.log(data);
+        setCharacters((prevState: ICharacter[]) =>
+          prevState.map((oldCharacter) =>
+            oldCharacter.id === character.id ? data : oldCharacter
+          )
+        );
+      } catch (error) {
+        console.error(error);
+      }
     }
+    setIsEditing(false);
   }
 
   return (
     <article>
-      <h2>Character name</h2>
       <form onSubmit={onSubmitForm}>
-        <div className="form-element">
+        <div className="form-control">
           <label htmlFor="name">Name:</label>
           <input
             type="text"
@@ -36,7 +74,7 @@ function EditCharacter() {
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-        <div className="form-element">
+        <div className="form-control">
           <label htmlFor="description">Description:</label>
           <input
             type="text"
@@ -70,6 +108,7 @@ function EditCharacter() {
           <button type="submit">Save Character</button>
         </div>
       </form>
+      <button onClick={() => setIsEditing(false)}>Exit</button>
     </article>
   );
 }

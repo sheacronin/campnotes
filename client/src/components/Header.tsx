@@ -1,8 +1,9 @@
+import '../styles/Header.css';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 interface HeaderProps {
-  user: { id: number; username: string; password?: string } | null;
+  user: { id: number; username: string } | null;
   setUser: Function;
   isLoading: boolean;
 }
@@ -34,9 +35,14 @@ function Header({ user, setUser, isLoading }: HeaderProps) {
                 </li>
               </>
             ) : (
-              <li>
-                <button onClick={logoutUser}>Logout</button>
-              </li>
+              <>
+                <li>
+                  <Link to="/characters">Characters</Link>
+                </li>
+                <li>
+                  <button onClick={logoutUser}>Logout</button>
+                </li>
+              </>
             )}
           </ul>
         )}

@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Uchen&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #d8d4d5;
+  font-family: 'Uchen', serif;
+}
+
+main {
+  padding: 20px;
+}
+
+main > * {
+  max-width: 600px;
+  margin: 80px auto 200px auto;
+}
+
+.loading {
+  color: white;
+  font-size: 30px;
+  text-align: center;
+}
+
+.auth-form {
+  background-color: #acad94;
+  padding: 20px;
+  display: grid;
+}
+
+.form-control {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.form-control input {
+  padding: 5px 10px;
+  font: inherit;
+  border: none;
+}
+
+.auth-form button {
+  justify-self: center;
+  width: 50%;
+  padding: 10px;
+  font: inherit;
+  border: none;
+  color: white;
+  background-color: #463f1a;
+}
+
+.auth-form button:hover {
+  background-color: #685d27;
+  font-weight: bold;
+}
+
+.errors {
+  background-color: #fe282890;
+  border: 3px solid #fe2828;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+button:hover {
+  cursor: pointer;
+}

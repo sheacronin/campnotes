@@ -44,11 +44,11 @@ router.put('/:id', async (req, res) => {
     const { id } = req.params;
     const { name, description, alignment, race } = req.body;
     const updateCharacter = await pool.query(
-      'UPDATE characters SET name = $1, description = $2, alignment = $3, race = $4 WHERE id = $5',
+      'UPDATE characters SET name = $1, description = $2, alignment = $3, race = $4 WHERE id = $5 RETURNING *',
       [name, description, alignment, race, id]
     );
 
-    res.json(updateCharacter);
+    res.json(updateCharacter.rows[0]);
   } catch (error) {
     console.error(error);
   }

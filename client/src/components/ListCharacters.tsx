@@ -1,15 +1,12 @@
+import '../styles/Characters.css';
 import React, { useEffect, useState } from 'react';
-
-interface Character {
-  id: number;
-  name: string;
-  description: string;
-  race: string;
-  alignment: string;
-}
+import EditCharacter from './EditCharacter';
+import Character from './Character';
+import { ICharacter } from '../types';
 
 function ListCharacters() {
-  const [characters, setCharacters] = useState<Character[]>([]);
+  const [characters, setCharacters] = useState<ICharacter[]>([]);
+  const [isAddingCharacter, setIsAddingCharacter] = useState(false);
 
   async function getCharacters() {
     try {
@@ -21,35 +18,29 @@ function ListCharacters() {
     }
   }
 
-  async function deleteCharacter(id: number) {
-    try {
-      const deletedCharacter = await fetch(
-        `http://localhost:5000/characters/${id}`,
-        { method: 'DELETE' }
-      );
-      console.log(deletedCharacter);
-      setCharacters(characters.filter((character) => character.id !== id));
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   useEffect(() => {
     getCharacters();
   }, []);
 
   return (
-    <div>
+    <div className="characters-container">
       {characters.map((character) => (
-        <article key={character.id}>
-          <h3>{character.name}</h3>
-          <div>
-            {character.alignment} | {character.race}
-          </div>
-          <div>{character.description}</div>
-          <button onClick={() => deleteCharacter(character.id)}>Delete</button>
-        </article>
+        <Character
+          key={character.id}
+          character={character}
+          setCharacters={setCharacters}
+        />
       ))}
+      {isAddingCharacter ? (
+        <EditCharacter
+          setIsEditing={setIsAddingCharacter}
+          setCharacters={setCharacters}
+        />
+      ) : (
+        <button onClick={() => setIsAddingCharacter((prevState) => !prevState)}>
+          Add Character
+        </button>
+      )}
     </div>
   );
 }
