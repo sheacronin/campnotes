@@ -5,3 +5,8 @@ export interface ICharacter {
   race: string;
   alignment: string;
 }
+
+export interface ICampaign {
+  id: number;
+  title: string;
+}

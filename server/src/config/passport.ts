@@ -52,11 +52,10 @@ const opts = {
 passport.use(
   new JwtStrategy(opts, async (jwtPayload, done) => {
     try {
-      console.log('jwt strat...');
       const user = await pool.query('SELECT * FROM users WHERE id = $1', [
         jwtPayload.id,
       ]);
-      return done(null, user);
+      return done(null, user.rows[0]);
     } catch (err) {
       return done(err);
     }
