@@ -1,32 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ICampaign } from '../types';
 import EditCampaign from './EditCampaign';
 import Campaign from './Campaign';
 import '../styles/Campaigns.css';
 
-function Home() {
-  const [campaigns, setCampaigns] = useState<ICampaign[]>([]);
+interface HomeProps {
+  campaigns: ICampaign[];
+  setCampaigns: Function;
+}
+
+function Home({ campaigns, setCampaigns }: HomeProps) {
   const [isAddingCampaign, setIsAddingCampaign] = useState(false);
-
-  useEffect(() => {
-    getCampaigns();
-  }, []);
-
-  async function getCampaigns() {
-    try {
-      const response = await fetch('http://localhost:5000/campaigns', {
-        credentials: 'include',
-      });
-      const data = await response.json();
-      setCampaigns(data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
   return (
     <>
-      <h2>Campaigns</h2>
+      <h2 className="page-heading">Campaigns</h2>
       <section className="campaigns-container">
         {campaigns.map((campaign) => (
           <Campaign

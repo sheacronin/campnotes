@@ -1,14 +1,23 @@
 import '../styles/Header.css';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { ICampaign } from '../types';
 
 interface HeaderProps {
   user: { id: number; username: string } | null;
   setUser: Function;
   isLoading: boolean;
+  campaigns: ICampaign[];
+  setCurrentCampaignId: Function;
 }
 
-function Header({ user, setUser, isLoading }: HeaderProps) {
+function Header({
+  user,
+  setUser,
+  isLoading,
+  campaigns,
+  setCurrentCampaignId,
+}: HeaderProps) {
   function logoutUser() {
     setUser(null);
     fetch('http://localhost:5000/users/logout', {
@@ -37,7 +46,17 @@ function Header({ user, setUser, isLoading }: HeaderProps) {
             ) : (
               <>
                 <li>
-                  <Link to="/characters">Characters</Link>
+                  <select
+                    name="campaign"
+                    id="campaign"
+                    onChange={(e) => setCurrentCampaignId(e.target.value)}
+                  >
+                    {campaigns.map((campaign) => (
+                      <option key={campaign.id} value={campaign.id}>
+                        {campaign.title}
+                      </option>
+                    ))}
+                  </select>
                 </li>
                 <li>
                   <button onClick={logoutUser}>Logout</button>

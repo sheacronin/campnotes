@@ -3,11 +3,13 @@ header {
   padding: 20px;
   color: white;
   font-weight: 900;
-  position: fixed;
   width: 100vw;
+  height: 80px;
   z-index: 1;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e2e2e2;
 }
 
 header h1 {
@@ -46,4 +48,12 @@ nav ul button {
 
 nav ul button:hover {
   color: #e2e2e2;
+}
+
+nav ul select {
+  background-color: transparent;
+  color: white;
+  text-align: center;
+  font: inherit;
+  border: none;
 }
