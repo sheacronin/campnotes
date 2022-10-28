@@ -7,19 +7,19 @@ import SignUp from './pages/SignUp/SignUp';
 import Header from './components/Header';
 import ListCharacters from './pages/Characters/ListCharacters';
 import SubHeader from './components/SubHeader';
+import useCampaigns from './pages/Home/components/Campaign/useCampaigns';
 
 function App() {
   const [user, setUser] = useState(null);
-  const [campaigns, setCampaigns] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentCampaignId, setCurrentCampaignId] = useState(null);
+  const { campaigns, addCampaign, editCampaign } = useCampaigns();
 
   useEffect(() => {
     fetchCurrentUser().then((data) => {
       if (data) {
         setUser(data.user);
         setIsLoading(false);
-        getCampaigns();
       }
     });
 
@@ -34,18 +34,6 @@ function App() {
       }
       const data = await res.json();
       return data;
-    }
-
-    async function getCampaigns() {
-      try {
-        const response = await fetch('http://localhost:5000/campaigns', {
-          credentials: 'include',
-        });
-        const data = await response.json();
-        setCampaigns(data);
-      } catch (error) {
-        console.error(error);
-      }
     }
   }, []);
 
@@ -63,7 +51,13 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<Home campaigns={campaigns} setCampaigns={setCampaigns} />}
+            element={
+              <Home
+                campaigns={campaigns}
+                addCampaign={addCampaign}
+                editCampaign={editCampaign}
+              />
+            }
           />
           <Route path="/login" element={<Login setUser={setUser} />} />
           <Route path="/signup" element={<SignUp />} />

@@ -1,7 +1,7 @@
 import './Header.css';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ICampaign } from '../types';
+import { ICampaign } from '../pages/Home/components/Campaign/useCampaigns';
 
 interface HeaderProps {
   user: { id: number; username: string } | null;

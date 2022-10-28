@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
-import { ICampaign } from '../../../../types';
+import { ICampaign } from './useCampaigns';
 import EditCampaign from './EditCampaign';
 
 interface CampaignProps {
   campaign: ICampaign;
-  setCampaigns: Function;
+  addCampaign: Function;
+  editCampaign: Function;
 }
 
-function Campaign({ campaign, setCampaigns }: CampaignProps) {
+function Campaign({ campaign, addCampaign, editCampaign }: CampaignProps) {
   const [isEditing, setIsEditing] = useState(false);
 
   return isEditing ? (
     <EditCampaign
       campaign={campaign}
       setIsEditing={setIsEditing}
-      setCampaigns={setCampaigns}
+      addCampaign={addCampaign}
+      editCampaign={editCampaign}
     />
   ) : (
     <article className="campaign">

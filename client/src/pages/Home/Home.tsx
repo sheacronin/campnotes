@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { ICampaign } from '../../types';
+import { ICampaign } from './components/Campaign/useCampaigns';
 import EditCampaign from './components/Campaign/EditCampaign';
 import Campaign from './components/Campaign/Campaign';
 import './components/Campaign/Campaigns.css';
 
 interface HomeProps {
   campaigns: ICampaign[];
-  setCampaigns: Function;
+  addCampaign: Function;
+  editCampaign: Function;
 }
 
-function Home({ campaigns, setCampaigns }: HomeProps) {
+function Home({ campaigns, addCampaign, editCampaign }: HomeProps) {
   const [isAddingCampaign, setIsAddingCampaign] = useState(false);
 
   return (
@@ -20,13 +21,15 @@ function Home({ campaigns, setCampaigns }: HomeProps) {
           <Campaign
             key={campaign.id}
             campaign={campaign}
-            setCampaigns={setCampaigns}
+            addCampaign={addCampaign}
+            editCampaign={editCampaign}
           />
         ))}
         {isAddingCampaign ? (
           <EditCampaign
             setIsEditing={setIsAddingCampaign}
-            setCampaigns={setCampaigns}
+            addCampaign={addCampaign}
+            editCampaign={editCampaign}
           />
         ) : (
           <button

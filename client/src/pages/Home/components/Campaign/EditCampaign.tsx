@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { ICampaign } from '../../../../types';
+import { ICampaign } from './useCampaigns';
 
 interface EditCampaignProps {
   campaign?: ICampaign;
   setIsEditing: Function;
-  setCampaigns: Function;
+  addCampaign: Function;
+  editCampaign: Function;
 }
 
 function EditCampaign({
   campaign = { id: -1, title: '' },
   setIsEditing,
-  setCampaigns,
+  addCampaign,
+  editCampaign,
 }: EditCampaignProps) {
   const [title, setTitle] = useState(campaign.title);
 
@@ -21,40 +23,10 @@ function EditCampaign({
 
     if (campaign.id === -1) {
       // If no campaign (set default id to -1), post new campaign
-      try {
-        const response = await fetch('http://localhost:5000/campaigns', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
-          credentials: 'include',
-        });
-        const data = await response.json();
-        console.log(data);
-        setCampaigns((prevState: ICampaign[]) => [...prevState, data]);
-      } catch (error) {
-        console.error(error);
-      }
+      addCampaign(body);
     } else {
-      // Else, edit the exisiting character
-      try {
-        const response = await fetch(
-          `http://localhost:5000/campaigns/${campaign.id}`,
-          {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
-          }
-        );
-        const data = await response.json();
-        console.log(data);
-        setCampaigns((prevState: ICampaign[]) =>
-          prevState.map((oldCharacter) =>
-            oldCharacter.id === campaign.id ? data : oldCharacter
-          )
-        );
-      } catch (error) {
-        console.error(error);
-      }
+      // Else, edit the exisiting campaign
+      editCampaign(campaign.id, body);
     }
     setIsEditing(false);
   }
