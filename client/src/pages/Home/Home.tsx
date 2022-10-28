@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { ICampaign } from '../types';
-import EditCampaign from './EditCampaign';
-import Campaign from './Campaign';
-import '../styles/Campaigns.css';
+import { ICampaign } from '../../types';
+import EditCampaign from './components/Campaign/EditCampaign';
+import Campaign from './components/Campaign/Campaign';
+import './components/Campaign/Campaigns.css';
 
 interface HomeProps {
   campaigns: ICampaign[];

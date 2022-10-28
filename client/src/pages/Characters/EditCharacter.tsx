@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { ICharacter } from '../types';
+import { ICharacter } from './useCharacters';
 
 interface EditCharacterProps {
   character?: ICharacter;
   setIsEditing: Function;
-  setCharacters: Function;
+  addCharacter: Function;
+  editCharacter: Function;
 }
 
 function EditCharacter({
   character = { id: -1, name: '', description: '', alignment: '', race: '' },
   setIsEditing,
-  setCharacters,
+  addCharacter,
+  editCharacter,
 }: EditCharacterProps) {
   const [name, setName] = useState(character.name);
   const [description, setDescription] = useState(character.description);
@@ -24,39 +26,10 @@ function EditCharacter({
 
     if (character.id === -1) {
       // If no character (set default id to -1), post new character
-      try {
-        const response = await fetch('http://localhost:5000/characters', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
-        });
-        const data = await response.json();
-        console.log(data);
-        setCharacters((prevState: ICharacter[]) => [...prevState, data]);
-      } catch (error) {
-        console.error(error);
-      }
+      addCharacter(body);
     } else {
       // Else, edit the exisiting character
-      try {
-        const response = await fetch(
-          `http://localhost:5000/characters/${character.id}`,
-          {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
-          }
-        );
-        const data = await response.json();
-        console.log(data);
-        setCharacters((prevState: ICharacter[]) =>
-          prevState.map((oldCharacter) =>
-            oldCharacter.id === character.id ? data : oldCharacter
-          )
-        );
-      } catch (error) {
-        console.error(error);
-      }
+      editCharacter(character.id, body);
     }
     setIsEditing(false);
   }

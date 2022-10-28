@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ICampaign } from '../types';
+import { ICampaign } from '../../../../types';
 import EditCampaign from './EditCampaign';
 
 interface CampaignProps {

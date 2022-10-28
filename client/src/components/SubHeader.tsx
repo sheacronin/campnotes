@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/SubHeader.css';
+import './SubHeader.css';
 
 function SubHeader() {
   return (

@@ -57,11 +57,11 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const deleteCharacter = await pool.query(
-      'DELETE FROM characters WHERE id = $1',
+    const deleteCharacterId = await pool.query(
+      'DELETE FROM characters WHERE id = $1 RETURNING id',
       [id]
     );
-    res.json('Character was deleted');
+    res.json(deleteCharacterId);
   } catch (error) {
     console.error(error);
   }
