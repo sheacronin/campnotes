@@ -1,17 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ICampaign } from './components/Campaign/useCampaigns';
 import EditCampaign from './components/Campaign/EditCampaign';
 import Campaign from './components/Campaign/Campaign';
+import useEditForm from '../../useEditForm';
 import './components/Campaign/Campaigns.css';
 
 interface HomeProps {
   campaigns: ICampaign[];
-  addCampaign: Function;
-  editCampaign: Function;
+  addCampaign: (campaign: ICampaign) => void;
+  editCampaign: (id: number, campaign: ICampaign) => void;
 }
 
 function Home({ campaigns, addCampaign, editCampaign }: HomeProps) {
-  const [isAddingCampaign, setIsAddingCampaign] = useState(false);
+  const {
+    isEditing: isAddingCampaign,
+    onSubmitForm,
+    openEditForm,
+    closeEditForm,
+  } = useEditForm(addCampaign, editCampaign);
 
   return (
     <>
@@ -27,16 +33,11 @@ function Home({ campaigns, addCampaign, editCampaign }: HomeProps) {
         ))}
         {isAddingCampaign ? (
           <EditCampaign
-            setIsEditing={setIsAddingCampaign}
-            addCampaign={addCampaign}
-            editCampaign={editCampaign}
+            onSubmitForm={onSubmitForm}
+            closeEditForm={closeEditForm}
           />
         ) : (
-          <button
-            onClick={() => setIsAddingCampaign((prevState) => !prevState)}
-          >
-            Add Campaign
-          </button>
+          <button onClick={() => openEditForm()}>Add Campaign</button>
         )}
       </section>
     </>

@@ -3,37 +3,25 @@ import { ICampaign } from './useCampaigns';
 
 interface EditCampaignProps {
   campaign?: ICampaign;
-  setIsEditing: Function;
-  addCampaign: Function;
-  editCampaign: Function;
+  onSubmitForm: Function;
+  closeEditForm: () => void;
 }
 
 function EditCampaign({
   campaign = { id: -1, title: '' },
-  setIsEditing,
-  addCampaign,
-  editCampaign,
+  onSubmitForm,
+  closeEditForm,
 }: EditCampaignProps) {
   const [title, setTitle] = useState(campaign.title);
 
-  async function onSubmitForm(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    const body = { title };
-
-    if (campaign.id === -1) {
-      // If no campaign (set default id to -1), post new campaign
-      addCampaign(body);
-    } else {
-      // Else, edit the exisiting campaign
-      editCampaign(campaign.id, body);
-    }
-    setIsEditing(false);
-  }
-
   return (
     <article>
-      <form onSubmit={onSubmitForm}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmitForm(campaign.id, { title });
+        }}
+      >
         <div className="form-control">
           <label htmlFor="title">Title:</label>
           <input
@@ -48,7 +36,7 @@ function EditCampaign({
           <button type="submit">Save Campaign</button>
         </div>
       </form>
-      <button onClick={() => setIsEditing(false)}>Exit</button>
+      <button onClick={() => closeEditForm()}>Exit</button>
     </article>
   );
 }

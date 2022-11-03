@@ -3,7 +3,7 @@ import React from 'react';
 import EditCharacter from './EditCharacter';
 import Character from './Character';
 import useCharacters from './useCharacters';
-import useEditCharacter from './useEditCharacter';
+import useEditForm from '../../useEditForm';
 
 function ListCharacters() {
   const { characters, deleteCharacter, addCharacter, editCharacter } =
@@ -13,7 +13,7 @@ function ListCharacters() {
     onSubmitForm,
     openEditForm,
     closeEditForm,
-  } = useEditCharacter(addCharacter, editCharacter);
+  } = useEditForm(addCharacter, editCharacter);
 
   return (
     <div className="characters-container">

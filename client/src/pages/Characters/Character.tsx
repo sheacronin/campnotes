@@ -1,13 +1,13 @@
 import React from 'react';
 import { ICharacter } from './useCharacters';
 import EditCharacter from './EditCharacter';
-import useEditCharacter from './useEditCharacter';
+import useEditForm from '../../useEditForm';
 
 interface CharacterProps {
   character: ICharacter;
-  deleteCharacter: Function;
-  addCharacter: Function;
-  editCharacter: Function;
+  deleteCharacter: (id: number) => void;
+  addCharacter: (character: ICharacter) => void;
+  editCharacter: (id: number, character: ICharacter) => void;
 }
 
 function Character({
@@ -16,8 +16,10 @@ function Character({
   addCharacter,
   editCharacter,
 }: CharacterProps) {
-  const { isEditing, onSubmitForm, openEditForm, closeEditForm } =
-    useEditCharacter(addCharacter, editCharacter);
+  const { isEditing, onSubmitForm, openEditForm, closeEditForm } = useEditForm(
+    addCharacter,
+    editCharacter
+  );
 
   return isEditing ? (
     <EditCharacter
