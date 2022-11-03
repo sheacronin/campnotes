@@ -1,13 +1,19 @@
 import './Characters.css';
-import React, { useState } from 'react';
+import React from 'react';
 import EditCharacter from './EditCharacter';
 import Character from './Character';
 import useCharacters from './useCharacters';
+import useEditCharacter from './useEditCharacter';
 
 function ListCharacters() {
-  const [isAddingCharacter, setIsAddingCharacter] = useState(false);
   const { characters, deleteCharacter, addCharacter, editCharacter } =
     useCharacters();
+  const {
+    isEditing: isAddingCharacter,
+    onSubmitForm,
+    openEditForm,
+    closeEditForm,
+  } = useEditCharacter(addCharacter, editCharacter);
 
   return (
     <div className="characters-container">
@@ -22,14 +28,11 @@ function ListCharacters() {
       ))}
       {isAddingCharacter ? (
         <EditCharacter
-          setIsEditing={setIsAddingCharacter}
-          addCharacter={addCharacter}
-          editCharacter={editCharacter}
+          onSubmitForm={onSubmitForm}
+          closeEditForm={closeEditForm}
         />
       ) : (
-        <button onClick={() => setIsAddingCharacter((prevState) => !prevState)}>
-          Add Character
-        </button>
+        <button onClick={() => openEditForm()}>Add Character</button>
       )}
     </div>
   );

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ICharacter } from './useCharacters';
 import EditCharacter from './EditCharacter';
+import useEditCharacter from './useEditCharacter';
 
 interface CharacterProps {
   character: ICharacter;
@@ -15,14 +16,14 @@ function Character({
   addCharacter,
   editCharacter,
 }: CharacterProps) {
-  const [isEditing, setIsEditing] = useState(false);
+  const { isEditing, onSubmitForm, openEditForm, closeEditForm } =
+    useEditCharacter(addCharacter, editCharacter);
 
   return isEditing ? (
     <EditCharacter
       character={character}
-      setIsEditing={setIsEditing}
-      addCharacter={addCharacter}
-      editCharacter={editCharacter}
+      onSubmitForm={onSubmitForm}
+      closeEditForm={closeEditForm}
     />
   ) : (
     <article className="character">
@@ -32,7 +33,7 @@ function Character({
       </div>
       <div>{character.description}</div>
       <button onClick={() => deleteCharacter(character.id)}>Delete</button>
-      <button onClick={() => setIsEditing(true)}>Edit</button>
+      <button onClick={() => openEditForm()}>Edit</button>
     </article>
   );
 }
