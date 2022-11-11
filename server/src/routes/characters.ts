@@ -1,11 +1,14 @@
 import express from 'express';
 const router = express.Router();
-import pool from '../config/db';
+import CharactersController from '../controllers/charactersController';
+import CharactersDao from '../daos/charactersDao';
+
+const charactersController = new CharactersController(new CharactersDao());
 
 router.get('/', async (req, res) => {
   try {
-    const allCharacters = await pool.query('SELECT * FROM characters');
-    res.json(allCharacters.rows);
+    const allCharacters = await charactersController.getAllCharacters();
+    res.json(allCharacters);
   } catch (error) {
     console.error(error);
   }
@@ -14,12 +17,9 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const character = await pool.query(
-      'SELECT * FROM characters WHERE id = $1',
-      [id]
-    );
-
-    res.json(character.rows[0]);
+    const characterId = Number(id);
+    const character = await charactersController.getCharacter(characterId);
+    res.json(character);
   } catch (error) {
     console.error(error);
   }
@@ -27,13 +27,8 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const { name, description, alignment, race } = req.body;
-    const newCharacter = await pool.query(
-      'INSERT INTO characters (name, description, alignment, race) VALUES($1, $2, $3, $4) RETURNING *',
-      [name, description, alignment, race]
-    );
-
-    res.json(newCharacter.rows[0]);
+    const newCharacter = await charactersController.createCharacter(req.body);
+    res.status(201).json(newCharacter);
   } catch (error) {
     console.error(error);
   }
@@ -42,13 +37,12 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, alignment, race } = req.body;
-    const updateCharacter = await pool.query(
-      'UPDATE characters SET name = $1, description = $2, alignment = $3, race = $4 WHERE id = $5 RETURNING *',
-      [name, description, alignment, race, id]
+    const characterId = Number(id);
+    const updatedCharacter = await charactersController.updateCharacter(
+      characterId,
+      req.body
     );
-
-    res.json(updateCharacter.rows[0]);
+    res.json(updatedCharacter);
   } catch (error) {
     console.error(error);
   }
@@ -57,11 +51,11 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const deleteCharacterId = await pool.query(
-      'DELETE FROM characters WHERE id = $1 RETURNING id',
-      [id]
+    const characterId = Number(id);
+    const deletedCharacterId = await charactersController.deleteCharacter(
+      characterId
     );
-    res.json(deleteCharacterId);
+    res.json(deletedCharacterId);
   } catch (error) {
     console.error(error);
   }
