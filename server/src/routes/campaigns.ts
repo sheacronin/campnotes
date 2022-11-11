@@ -1,21 +1,22 @@
 import express from 'express';
 const router = express.Router();
-import pool from '../config/db';
 import { UserAuthInfoRequest, User } from '../types';
 import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
+import CampaignsController from '../controllers/campaignsController';
+import CampaignsDao from '../daos/campaignsDao';
 
-// Get current user's campaigns
+const campaignsController = new CampaignsController(new CampaignsDao());
+
 router.get('/', [
   passport.authenticate('jwt', { session: false }),
 
   async (req: UserAuthInfoRequest, res: Response) => {
     try {
-      const allCurrentUserCampaigns = await pool.query(
-        'SELECT * FROM campaigns WHERE game_master_id = $1',
-        [req.user.id]
-      );
-      res.json(allCurrentUserCampaigns.rows);
+      const { id } = req.user;
+      const allCurrentUserCampaigns =
+        await campaignsController.getAllCampaignsByGameMaster(id);
+      res.json(allCurrentUserCampaigns);
     } catch (error) {
       console.error(error);
     }
@@ -27,13 +28,12 @@ router.post('/', [
 
   async (req: UserAuthInfoRequest, res: Response, next: NextFunction) => {
     try {
-      const { title } = req.body;
-      const newCampaign = await pool.query(
-        'INSERT INTO campaigns (title, game_master_id) VALUES($1, $2) RETURNING *',
-        [title, req.user.id]
-      );
-
-      res.json(newCampaign.rows[0]);
+      const { id } = req.user;
+      const newCampaign = await campaignsController.createCampaign({
+        ...req.body,
+        gameMasterId: id,
+      });
+      res.status(201).json(newCampaign);
     } catch (error) {
       console.error(error);
     }
@@ -43,13 +43,12 @@ router.post('/', [
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { title } = req.body;
-    const updateCampaign = await pool.query(
-      'UPDATE campaigns SET title = $1 WHERE id = $2 RETURNING *',
-      [title, id]
+    const campaignId = Number(id);
+    const updatedCampaign = await campaignsController.updateCampaign(
+      campaignId,
+      req.body
     );
-
-    res.json(updateCampaign.rows[0]);
+    res.json(updatedCampaign);
   } catch (error) {
     console.error(error);
   }
