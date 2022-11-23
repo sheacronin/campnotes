@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Character component matches snapshot 1`] = `
+<div>
+  <article
+    class="character"
+  >
+    <h3>
+      Name
+    </h3>
+    <div>
+      NG
+       | 
+      Race
+    </div>
+    <div>
+      Desc
+    </div>
+    <button>
+      Delete
+    </button>
+    <button>
+      Edit
+    </button>
+  </article>
+</div>
+`;

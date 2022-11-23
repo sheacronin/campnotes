@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Campaign component matches snapshot 1`] = `
+<div>
+  <article
+    class="campaign"
+  >
+    <h3>
+      Campaign
+    </h3>
+    <button>
+      Edit
+    </button>
+  </article>
+</div>
+`;
