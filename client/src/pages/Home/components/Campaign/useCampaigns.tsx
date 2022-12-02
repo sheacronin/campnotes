@@ -29,7 +29,6 @@ const useCampaigns = () => {
         credentials: 'include',
       });
       const data = await response.json();
-      console.log(data);
       setCampaigns((prevState) => [...prevState, data]);
     } catch (error) {
       console.error(error);
@@ -44,7 +43,6 @@ const useCampaigns = () => {
         body: JSON.stringify(campaign),
       });
       const updatedCampaign = await response.json();
-      console.log(updatedCampaign);
       setCampaigns((prevState: ICampaign[]) =>
         prevState.map((oldCampaign) =>
           oldCampaign.id === id ? updatedCampaign : oldCampaign
